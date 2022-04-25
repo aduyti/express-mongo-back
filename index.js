@@ -43,12 +43,21 @@ async function run() {
             const result = await userCollection.deleteOne(query);
             res.send(result);
         })
-        // app.put('/api/user/:id', async (req, res) => {
-        //     const filter = { _id: ObjectId(req.params.id) };
-        //     const newUser = req.body;
-        //     const result = await userCollection.updateOne(filter, newUser);
-        //     res.send(result);
-        // });
+        app.put('/api/user/:id', async (req, res) => {
+            const upUser = req.body;
+            const filter = { _id: ObjectId(req.params.id) };
+            const options = { upsert: true };
+            const upDoc = {
+                $set: {
+                    name: upUser.name,
+                    age: upUser.age,
+                    gender: upUser.gender,
+                    money: upUser.money
+                }
+            };
+            const result = await userCollection.updateOne(filter, upDoc, options);
+            res.send(result);
+        });
     }
     finally {
 
